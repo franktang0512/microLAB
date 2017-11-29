@@ -111,17 +111,21 @@ void AdcSingleModeTest()
     uint8_t  u8Option;
     int32_t  i32ConversionData;
 
-    printf("\n");
-    printf("+----------------------------------------------------------------------+\n");
-    printf("|                      ADC single mode sample code                     |\n");
-    printf("+----------------------------------------------------------------------+\n");
+
+//    printf("\n");
+//    printf("+----------------------------------------------------------------------+\n");
+//    printf("|                      LAB3 DEMO                                       |\n");
+//    printf("+----------------------------------------------------------------------+\n");
 
     while(1)
     {
 			/*this is what lab3 require */
-					  /* Set the ADC operation mode as single, input mode as differential and
-               enable analog input channel 2 for differential input channel pair 1 */
-            ADC_Open(ADC, ADC_ADCR_DIFFEN_DIFFERENTIAL, ADC_ADCR_ADMD_SINGLE, 0x1 << 2);
+//						u8Option = getchar();
+//						if(u8Option=='0'){
+//							break;
+//						}
+            /* Set the ADC operation mode as single, input mode as single-end and enable the analog input channel 2 */
+						ADC_Open(ADC, ADC_ADCR_DIFFEN_SINGLE_END, ADC_ADCR_ADMD_SINGLE, 0x1 << 2);
 
             /* Power on ADC module */
             ADC_POWER_ON(ADC);
@@ -135,6 +139,7 @@ void AdcSingleModeTest()
 
             /* Reset the ADC interrupt indicator and Start A/D conversion */
             g_u32AdcIntFlag = 0;
+
             ADC_START_CONV(ADC);
 
             /* Wait ADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function)*/
@@ -143,80 +148,103 @@ void AdcSingleModeTest()
             /* Disable the ADC interrupt */
             ADC_DisableInt(ADC, ADC_ADF_INT);
 
-            /* Get the conversion result of the specified ADC channel */
+            /* Get the conversion result of the ADC channel 2 */
             i32ConversionData = ADC_GET_CONVERSION_DATA(ADC, 2);
-            printf("Conversion result of channel : %d\n\n", i32ConversionData);
-//        printf("Select input mode:\n");
-//        printf("  [1] Single end input (channel 2 only)\n");
-//        printf("  [2] Differential input (channel pair 1 only)\n");
-//        printf("  Other keys: exit single mode test\n");
-//        u8Option = getchar();
-//        if(u8Option == '1')
-//        {
 
-//            /* Set the ADC operation mode as single, input mode as single-end and enable the analog input channel 2 */
-//						ADC_Open(ADC, ADC_ADCR_DIFFEN_SINGLE_END, ADC_ADCR_ADMD_SINGLE, 0x1 << 2);
+						printf("Conversion result of channel : %d\n\n", i32ConversionData);
+						if(i32ConversionData<1000){
+								GPIO_SetMode(PC, BIT12, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT13, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT14, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT15, GPIO_PMD_OUTPUT);
+								PC12=0;							
+							
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
 
-//            /* Power on ADC module */
-//            ADC_POWER_ON(ADC);
+								PC12=1;
+								
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
 
-//            /* Clear the A/D interrupt flag for safe */
-//            ADC_CLR_INT_FLAG(ADC, ADC_ADF_INT);
 
-//            /* Enable the ADC interrupt */
-//            ADC_EnableInt(ADC, ADC_ADF_INT);
-//            NVIC_EnableIRQ(ADC_IRQn);
+								PC13=0;							
+							
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
 
-//            /* Reset the ADC interrupt indicator and Start A/D conversion */
-//            g_u32AdcIntFlag = 0;
+								PC13=1;
+								
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
+	
+								PC14=0;							
+							
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
+					
 
-//            ADC_START_CONV(ADC);
+								PC14=1;
+								
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
+								PC15=0;							
+							
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
+					
 
-//            /* Wait ADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function)*/
-//            while(g_u32AdcIntFlag == 0);
+								PC15=1;
+								
+								CLK_SysTickDelay(10000);
+								CLK_SysTickDelay(10000);
+							
+	
+								
+								
+						}else{
+								GPIO_SetMode(PC, BIT12, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT13, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT14, GPIO_PMD_OUTPUT);
+								GPIO_SetMode(PC, BIT15, GPIO_PMD_OUTPUT);
+								PC12=0;							
+							
+								CLK_SysTickDelay(10000);
+						
 
-//            /* Disable the ADC interrupt */
-//            ADC_DisableInt(ADC, ADC_ADF_INT);
+								PC12=1;
+								
+								CLK_SysTickDelay(10000);
 
-//            /* Get the conversion result of the ADC channel 2 */
-//            i32ConversionData = ADC_GET_CONVERSION_DATA(ADC, 2);
-//            printf("Conversion result of channel 2: 0x%X (%d)\n\n", i32ConversionData, i32ConversionData);
-//        }
-//        else if(u8Option == '2')
-//        {
 
-//            /* Set the ADC operation mode as single, input mode as differential and
-//               enable analog input channel 2 for differential input channel pair 1 */
-//            ADC_Open(ADC, ADC_ADCR_DIFFEN_DIFFERENTIAL, ADC_ADCR_ADMD_SINGLE, 0x1 << 2);
+								PC13=0;							
+							
+								CLK_SysTickDelay(10000);
+						
 
-//            /* Power on ADC module */
-//            ADC_POWER_ON(ADC);
+								PC13=1;
+								
+								CLK_SysTickDelay(10000);
 
-//            /* Clear the A/D interrupt flag for safe */
-//            ADC_CLR_INT_FLAG(ADC, ADC_ADF_INT);
+								PC14=0;							
+							
+								CLK_SysTickDelay(10000);
+						
 
-//            /* Enable the ADC interrupt */
-//            ADC_EnableInt(ADC, ADC_ADF_INT);
-//            NVIC_EnableIRQ(ADC_IRQn);
+								PC14=1;
+								
+								CLK_SysTickDelay(10000);
 
-//            /* Reset the ADC interrupt indicator and Start A/D conversion */
-//            g_u32AdcIntFlag = 0;
-//            ADC_START_CONV(ADC);
+								PC15=0;							
+							
+								CLK_SysTickDelay(10000);
+					
 
-//            /* Wait ADC interrupt (g_u32AdcIntFlag will be set at IRQ_Handler function)*/
-//            while(g_u32AdcIntFlag == 0);
-
-//            /* Disable the ADC interrupt */
-//            ADC_DisableInt(ADC, ADC_ADF_INT);
-
-//            /* Get the conversion result of the specified ADC channel */
-//            i32ConversionData = ADC_GET_CONVERSION_DATA(ADC, 2);
-//            printf("Conversion result of channel : %d\n\n", i32ConversionData);
-//						//printf("Conversion result of channel pair 1: 0x%X (%d)\n\n", i32ConversionData, i32ConversionData);
-//        }
-//        else
-//            return ;
-
+								PC15=1;
+								
+								CLK_SysTickDelay(10000);
+	
+						}
     }
 }
 
@@ -274,9 +302,9 @@ int main(void)
 
 }
 
-void ADC_Init(){
+//void ADC_Init(){
 
-}
+//}
 
 
 
